@@ -12,7 +12,7 @@ const url =
 app.use("/nations", nationEndpoints);
 app.use("/login", userEndpoints);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log("server runs on port", PORT);
 });
