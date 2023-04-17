@@ -5,10 +5,8 @@ import NationModel from "../models/nations.js";
 const nationEndpoints = express.Router();
 
 nationEndpoints.get("/getNations", (req, res) => {
-  //req = get info from frontend, res = send info from backend
-
   NationModel.find({})
-    .then((err, result) => {
+    .then((result) => {
       console.log("getresult", result);
       res.status(200).json(result);
     })
