@@ -10,7 +10,7 @@ nationEndpoints.get("/getNations", (req, res) => {
   NationModel.find({})
     .then((err, result) => {
       console.log("getresult", result);
-      res.json("result", result);
+      res.status(200).json(result);
     })
     .catch((err) => {
       console.log("error", err);
