@@ -1,7 +1,5 @@
 import express from "express";
-//const express = require("express");
 import NationModel from "../models/nations.js";
-//const NationModel = require("../models/nations.js");
 const nationEndpoints = express.Router();
 
 nationEndpoints.get("/getNations", (req, res) => {
@@ -53,9 +51,7 @@ nationEndpoints.patch("/:id", (req, res) => {
   const { maxCapacity, guestCount, description } = req.body;
 
   if (!maxCapacity && !guestCount && !description) {
-    res
-      .status(400)
-      .send({ error: "maxCapacity, guestCount or description missing 🙁" });
+    res.status(400).send({ error: "Something is missing. Try again! 🙁" });
   }
 
   let updateObj = {};
@@ -68,10 +64,10 @@ nationEndpoints.patch("/:id", (req, res) => {
   }
 
   if (guestCount) {
-    updateObj.$inc = { guestCount: 1 };
+    updateObj.$inc = { guestCount };
   }
 
-  NationModel.findByIdAndUpdate(id, updateObj, { new: true })
+  NationModel.findByIdAndUpdate(id, updateObj, { new: false }) // ta bort true
     .then((updatedNation) => {
       if (!updatedNation) {
         res.status(404).send({ error: "Nation not found 🙁" });
