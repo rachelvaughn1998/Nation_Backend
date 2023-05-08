@@ -48,9 +48,9 @@ nationEndpoints.post("/:id", (req, res) => {
 
 nationEndpoints.patch("/:id", (req, res) => {
   const { id } = req.params;
-  const { maxCapacity, guestCount, description } = req.body;
+  const { maxCapacity, guestChange, description } = req.body;
 
-  if (!maxCapacity && !guestCount && !description) {
+  if (!maxCapacity && !guestChange && !description) {
     res.status(400).send({ error: "Something is missing. Try again! 🙁" });
   }
 
@@ -63,11 +63,15 @@ nationEndpoints.patch("/:id", (req, res) => {
     updateObj.description = description;
   }
 
-  if (guestCount) {
-    updateObj.$inc = { guestCount };
+  if (guestChange === "add") {
+    updateObj.$inc = { guestCount: 1 };
   }
 
-  NationModel.findByIdAndUpdate(id, updateObj, { new: false }) // ta bort true
+  if (guestChange === "remove") {
+    updateObj.$inc = { guestCount: -1 };
+  }
+
+  NationModel.findByIdAndUpdate(id, updateObj, { new: false })
     .then((updatedNation) => {
       if (!updatedNation) {
         res.status(404).send({ error: "Nation not found 🙁" });
