@@ -71,7 +71,7 @@ nationEndpoints.patch("/:id", (req, res) => {
     updateObj.$inc = { guestCount: -1 };
   }
 
-  NationModel.findByIdAndUpdate(id, updateObj, { new: false })
+  NationModel.findByIdAndUpdate(id, updateObj, { new: true })
     .then((updatedNation) => {
       if (!updatedNation) {
         res.status(404).send({ error: "Nation not found 🙁" });
