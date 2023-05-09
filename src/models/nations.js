@@ -57,6 +57,10 @@ const NationSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.Url,
     required: false,
   },
+  header: {
+    type: mongoose.SchemaTypes.Url,
+    required: false,
+  },
 });
 
 NationSchema.set("toJSON", {
