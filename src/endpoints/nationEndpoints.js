@@ -50,7 +50,7 @@ nationEndpoints.patch("/:id", (req, res) => {
   const { id } = req.params;
   const { maxCapacity, guestChange, description, image, header } = req.body;
 
-  if (!maxCapacity && !guestChange && !description && !image && !header) {
+  if (!maxCapacity && !guestChange && !description && !image) {
     res.status(400).send({ error: "Something is missing. Try again! 🙁" });
   }
 
