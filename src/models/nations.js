@@ -52,6 +52,11 @@ const NationSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+
+  image: {
+    type: mongoose.SchemaTypes.Url,
+    required: false,
+  },
 });
 
 NationSchema.set("toJSON", {
