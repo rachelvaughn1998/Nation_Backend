@@ -5,11 +5,9 @@ const nationEndpoints = express.Router();
 nationEndpoints.get("/getNations", (req, res) => {
   NationModel.find({})
     .then((result) => {
-      console.log("getresult", result);
       res.status(200).json(result);
     })
     .catch((err) => {
-      console.log("error", err);
       res.status(400).send({ error: "Could not get nations 🙁" });
     });
 });
@@ -22,7 +20,7 @@ nationEndpoints.post("/createNations", (req, res) => {
   const newNation = new NationModel(nation);
   newNation
     .save()
-    .then((result) => console.log("result", result))
+    .then((result) => console.log("hej"))
     .catch((err) => {
       res.status(400).send({ error: "Could not create nations 🙁" });
     });
@@ -40,9 +38,9 @@ nationEndpoints.get("/:id", (req, res) => {
 
 nationEndpoints.post("/:id", (req, res) => {
   const nation = req.body;
-  console.log("nation", nation);
+
   var query = { id: req.params.id };
-  console.log("req.newData", req.newData);
+
   req.newData.guestCount = nation.guestCount;
 });
 
