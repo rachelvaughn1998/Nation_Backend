@@ -84,11 +84,11 @@ nationEndpoints.patch("/:id", (req, res) => {
         }
       }
 
-      if (image !== undefined) {
+      if (image) {
         updateObj.image = image;
       }
 
-      if (header !== undefined) {
+      if (header) {
         updateObj.header = header;
       }
 

@@ -52,14 +52,26 @@ const NationSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-
   image: {
-    type: mongoose.SchemaTypes.Url,
+    type: String,
     required: false,
+    match: /^https?:\/\/.*$/i,
   },
   header: {
-    type: mongoose.SchemaTypes.Url,
+    type: String,
     required: false,
+    match: /^https?:\/\/.*$/i,
+  },
+  menu: {
+    public_id: {
+      type: String,
+      required: false,
+    },
+    url: {
+      type: String,
+      required: false,
+      match: /^https?:\/\/.*$/i,
+    },
   },
 });
 
