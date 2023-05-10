@@ -54,39 +54,58 @@ nationEndpoints.patch("/:id", (req, res) => {
     res.status(400).send({ error: "Something is missing. Try again! 🙁" });
   }
 
-  let updateObj = {};
-  if (maxCapacity) {
-    updateObj.maxCapacity = maxCapacity;
-  }
-
-  if (description) {
-    updateObj.description = description;
-  }
-
-  if (guestChange === "add") {
-    updateObj.$inc = { guestCount: 1 };
-  }
-
-  if (guestChange === "remove") {
-    updateObj.$inc = { guestCount: -1 };
-  }
-  if (image) {
-    updateObj.image = image;
-  }
-  if (header) {
-    updateObj.header = header;
-  }
-
-  NationModel.findByIdAndUpdate(id, updateObj, { new: true })
-    .then((updatedNation) => {
-      if (!updatedNation) {
-        res.status(404).send({ error: "Nation not found 🙁" });
-      } else {
-        res.json(updatedNation);
+  // Retrieve the current guestCount value from the database
+  NationModel.findById(id)
+    .then((nation) => {
+      if (!nation) {
+        throw new Error("Nation not foundd 🙁");
       }
+
+      const currentGuestCount = nation.guestCount || 0;
+      let updateObj = {};
+
+      if (maxCapacity) {
+        updateObj.maxCapacity = maxCapacity;
+      }
+
+      if (description) {
+        updateObj.description = description;
+      }
+
+      if (guestChange === "add") {
+        if (currentGuestCount < (maxCapacity || Infinity)) {
+          updateObj.$inc = { guestCount: 1 };
+        }
+      }
+
+      if (guestChange === "remove") {
+        if (currentGuestCount > 0) {
+          updateObj.$inc = { guestCount: -1 };
+        }
+      }
+
+      if (image) {
+        updateObj.image = image;
+      }
+
+      if (header) {
+        updateObj.header = header;
+      }
+
+      NationModel.findByIdAndUpdate(id, updateObj, { new: true })
+        .then((updatedNation) => {
+          if (!updatedNation) {
+            res.status(404).send({ error: "Nation not found 🙁" });
+          } else {
+            res.json(updatedNation);
+          }
+        })
+        .catch((err) => {
+          res.status(400).send({ error: "Could not update nation 🙁" });
+        });
     })
     .catch((err) => {
-      res.status(400).send({ error: "Could not update nation 🙁" });
+      res.status(404).send({ error: err.message });
     });
 });
 
