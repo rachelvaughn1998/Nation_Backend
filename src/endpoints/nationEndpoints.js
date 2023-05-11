@@ -1,6 +1,41 @@
 import express from "express";
 import NationModel from "../models/nations.js";
+import cloudinary from "cloudinary";
+
 const nationEndpoints = express.Router();
+
+// configure Cloudinary with your API credentials
+cloudinary.config({
+  cloud_name: "dg4jye9k4",
+  api_key: "763628149477897",
+  api_secret: "V6ykTSqs7VPwU03gVEPyQDJhdfw",
+});
+
+nationEndpoints.post("/:nationId/image", async (req, res) => {
+  try {
+    const nationId = req.params.nationId;
+    const fileStr = req.body.data;
+
+    const uploadedImage = await cloudinary.uploader.upload(fileStr, {
+      folder: "menu",
+      overwrite: true,
+      transformation: { width: 400, height: 400, crop: "limit" },
+    });
+
+    const updatedNation = await NationModel.findByIdAndUpdate(
+      nationId,
+      {
+        "menu.url": uploadedImage.url,
+        "menu.public_id": uploadedImage.public_id,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedNation);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 nationEndpoints.get("/getNations", (req, res) => {
   NationModel.find({})
