@@ -4,7 +4,7 @@ import cloudinary from "cloudinary";
 
 const nationEndpoints = express.Router();
 
-// configure Cloudinary with your API credentials s
+// configure Cloudinary with your API credentials
 cloudinary.config({
   cloud_name: "dg4jye9k4",
   api_key: "763628149477897",
