@@ -1,15 +1,7 @@
 import express from "express";
 import NationModel from "../models/nations.js";
-import cloudinary from "cloudinary";
 
 const nationEndpoints = express.Router();
-
-// configure Cloudinary with your API credentials
-cloudinary.config({
-  cloud_name: "dg4jye9k4",
-  api_key: "763628149477897",
-  api_secret: "V6ykTSqs7VPwU03gVEPyQDJhdfw",
-});
 
 nationEndpoints.post("/:nationId/image", async (req, res) => {
   try {
