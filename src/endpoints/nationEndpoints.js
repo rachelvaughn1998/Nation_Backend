@@ -1,31 +1,25 @@
 import express from "express";
 import NationModel from "../models/nations.js";
+import upload from "../middleware/upload.js";
+import uploadToCloudinary from "../models/cloudinary.js";
 
 const nationEndpoints = express.Router();
 
-nationEndpoints.post("/:nationId/image", async (req, res) => {
+nationEndpoints.post("/:id", upload.single("nationMenu"), async (req, res) => {
   try {
-    const nationId = req.params.nationId;
-    const fileStr = req.body.data;
-
-    const uploadedImage = await cloudinary.uploader.upload(fileStr, {
-      folder: "menu",
-      overwrite: true,
-      transformation: { width: 400, height: 400, crop: "limit" },
-    });
-
-    const updatedNation = await NationModel.findByIdAndUpdate(
-      nationId,
+    const data = await uploadToCloudinary(req.file.path, "Kandidat_menu");
+    const savedMenu = await NationModel.updateOne(
+      { id: req.params.id },
       {
-        "menu.url": uploadedImage.url,
-        "menu.public_id": uploadedImage.public_id,
-      },
-      { new: true }
+        $set: {
+          menuUrl: data.url,
+          publicId: data.public_id,
+        },
+      }
     );
-    res.status(200).json(updatedNation);
+    res.status(200).send("nation meny uploaded with success");
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res.status(400).send(error);
   }
 });
 

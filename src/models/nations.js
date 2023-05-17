@@ -60,16 +60,13 @@ const NationSchema = new mongoose.Schema({
     required: false,
     match: /^https?:\/\/.*$/i,
   },
-  menu: {
-    public_id: {
-      type: String,
-      required: false,
-    },
-    url: {
-      type: String,
-      required: false,
-      match: /^https?:\/\/.*$/i,
-    },
+  publicId: {
+    type: String,
+  },
+
+  menuUrl: {
+    type: String,
+    required: false,
   },
 });
 
