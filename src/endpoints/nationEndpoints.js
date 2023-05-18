@@ -5,23 +5,27 @@ import uploadToCloudinary from "../models/cloudinary.js";
 
 const nationEndpoints = express.Router();
 
-nationEndpoints.post("/:id", upload.single("nationMenu"), async (req, res) => {
-  try {
-    const data = await uploadToCloudinary(req.file.path, "Kandidat_menu");
-    const savedMenu = await NationModel.updateOne(
-      { id: req.params.id },
-      {
-        $set: {
-          menuUrl: data.url,
-          publicId: data.public_id,
-        },
-      }
-    );
-    res.status(200).send("nation meny uploaded with success");
-  } catch (error) {
-    res.status(400).send(error);
+nationEndpoints.post(
+  "/menu/:id",
+  upload.single("nationMenu"),
+  async (req, res) => {
+    try {
+      const data = await uploadToCloudinary(req.file.path, "Kandidat_menu");
+      const savedMenu = await NationModel.updateOne(
+        { id: req.params.id },
+        {
+          $set: {
+            menuUrl: data.url,
+            publicId: data.public_id,
+          },
+        }
+      );
+      res.status(200).send("nation meny uploaded with success");
+    } catch (error) {
+      res.status(400).send(error);
+    }
   }
-});
+);
 
 nationEndpoints.get("/getNations", (req, res) => {
   NationModel.find({})
