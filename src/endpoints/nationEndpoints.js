@@ -11,16 +11,19 @@ nationEndpoints.post(
   async (req, res) => {
     try {
       const data = await uploadToCloudinary(req.file.path, "Kandidat_menu");
-      const savedMenu = await NationModel.updateOne(
-        { id: req.params.id },
-        {
-          $set: {
-            menuUrl: data.url,
-            publicId: data.public_id,
-          },
-        }
+
+      const menu = {
+        menuUrl: data.url,
+        publicId: data.public_id,
+      };
+
+      const updatedNation = await NationModel.findByIdAndUpdate(
+        req.params.id,
+        { $set: menu },
+        { new: true }
       );
-      res.status(200).send("nation meny uploaded with success");
+
+      res.status(200).send("Nation menu uploaded successfully");
     } catch (error) {
       res.status(400).send(error);
     }
