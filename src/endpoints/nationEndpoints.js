@@ -2,9 +2,9 @@ import express from "express";
 import NationModel from "../models/nations.js";
 import upload from "../middleware/upload.js";
 import uploadToCloudinary from "../models/cloudinary.js";
+import cron from "node-cron";
 
 const nationEndpoints = express.Router();
-const cron = require("node-cron");
 
 nationEndpoints.post(
   "/menu/:id",
@@ -134,7 +134,6 @@ nationEndpoints.patch("/:id", (req, res) => {
       res.status(404).send({ error: err.message });
     });
 });
-
 async function resetCounts() {
   try {
     const update = {
@@ -154,9 +153,9 @@ async function resetCounts() {
 
 resetCounts();
 
-/* cron.schedule("0 4 * * *", () => {
+cron.schedule("0 4 * * *", () => {
   console.log("Running the resetCounts() function...");
   resetCounts();
-}); */
+});
 
 export default nationEndpoints;
