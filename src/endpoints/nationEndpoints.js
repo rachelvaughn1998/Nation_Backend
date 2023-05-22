@@ -4,6 +4,7 @@ import upload from "../middleware/upload.js";
 import uploadToCloudinary from "../models/cloudinary.js";
 
 const nationEndpoints = express.Router();
+const cron = require("node-cron");
 
 nationEndpoints.post(
   "/menu/:id",
@@ -80,7 +81,6 @@ nationEndpoints.patch("/:id", (req, res) => {
     res.status(400).send({ error: "Something is missing. Try again! 🙁" });
   }
 
-  // Retrieve the current guestCount value from the database
   NationModel.findById(id)
     .then((nation) => {
       if (!nation) {
@@ -134,5 +134,29 @@ nationEndpoints.patch("/:id", (req, res) => {
       res.status(404).send({ error: err.message });
     });
 });
+
+async function resetCounts() {
+  try {
+    const update = {
+      $set: {
+        guestCount: 0,
+        maxCapacity: 0,
+      },
+    };
+
+    await NationModel.updateMany({}, update);
+
+    console.log("Counts reset successfully.");
+  } catch (error) {
+    console.error("Error occurred:", error);
+  }
+}
+
+resetCounts();
+
+/* cron.schedule("0 4 * * *", () => {
+  console.log("Running the resetCounts() function...");
+  resetCounts();
+}); */
 
 export default nationEndpoints;
