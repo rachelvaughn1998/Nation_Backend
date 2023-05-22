@@ -151,8 +151,6 @@ async function resetCounts() {
   }
 }
 
-resetCounts();
-
 cron.schedule("0 4 * * *", () => {
   console.log("Running the resetCounts() function...");
   resetCounts();
