@@ -49,7 +49,7 @@ nationEndpoints.post("/createNations", (req, res) => {
   const newNation = new NationModel(nation);
   newNation
     .save()
-    .then((result) => console.log("hej"))
+    .then(result)
     .catch((err) => {
       res.status(400).send({ error: "Could not create nations 🙁" });
     });
@@ -144,15 +144,10 @@ async function resetCounts() {
     };
 
     await NationModel.updateMany({}, update);
-
-    console.log("Counts reset successfully.");
-  } catch (error) {
-    console.error("Error occurred:", error);
-  }
+  } catch (error) {}
 }
 
 cron.schedule("0 4 * * *", () => {
-  console.log("Running the resetCounts() function...");
   resetCounts();
 });
 
