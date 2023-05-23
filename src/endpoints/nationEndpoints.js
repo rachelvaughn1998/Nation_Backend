@@ -134,7 +134,8 @@ nationEndpoints.patch("/:id", (req, res) => {
       res.status(404).send({ error: err.message });
     });
 });
-async function resetCounts() {
+
+/* async function resetCounts() {
   try {
     const update = {
       $set: {
@@ -149,6 +150,6 @@ async function resetCounts() {
 
 cron.schedule("0 4 * * *", () => {
   resetCounts();
-});
+}); */
 
 export default nationEndpoints;
